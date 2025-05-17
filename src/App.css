@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+
+/* ✅ Mobile optimizations (only additions) */
+@media (max-width: 640px) {
+  #root {
+    padding: 1rem;
+    text-align: left;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .logo {
+    height: 4em;
+    padding: 1em;
+  }
+}

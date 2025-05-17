@@ -4,7 +4,7 @@ import emailjs from 'emailjs-com';
 
 const Button = ({ className, onClick, children, type = "button", disabled = false }) => (
   <button
-    className={`px-8 py-3 text-sm bg-indigo-500 text-white hover:bg-teal-400 rounded-md transition-transform transform hover:scale-110 shadow-md ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+    className={`px-4 md:px-8 py-2 md:py-3 text-sm md:text-base bg-indigo-500 text-white hover:bg-teal-400 rounded-md transition-transform transform hover:scale-110 shadow-md ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
     onClick={onClick}
     type={type}
     disabled={disabled}
@@ -134,6 +134,7 @@ const CraftedWeb = () => {
     error: false,
     message: ''
   });
+  const [menuOpen, setMenuOpen] = useState(false);
   const form = useRef();
   
   const scrollToSection = (id) => {
@@ -141,6 +142,7 @@ const CraftedWeb = () => {
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
     }
+    setMenuOpen(false);
   };
 
   const openServiceDetail = (serviceId) => {
@@ -207,6 +209,11 @@ const CraftedWeb = () => {
     }));
   };
 
+  // Toggle mobile menu
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -267,9 +274,9 @@ const CraftedWeb = () => {
       {activeService ? (
   // Service Detail Page
   <div className="w-full min-h-screen bg-gradient-to-r from-indigo-500 to-teal-300">
-  <header className="w-full py-6 shadow-lg bg-white text-blue-600 text-center text-3xl font-bold sticky top-0 z-50">
-    <nav className="flex justify-between items-center px-18">
-      <div className="text-3xl font-bold">Crafted Web</div>
+  <header className="w-full py-4 md:py-6 shadow-lg bg-white text-blue-600 text-center sticky top-0 z-50">
+    <nav className="flex justify-between items-center px-4 md:px-8 lg:px-18">
+      <div className="text-xl md:text-3xl font-bold">Crafted Web</div>
       <Button 
         onClick={closeServiceDetail}
         className="bg-indigo-600 hover:bg-teal-400"
@@ -285,11 +292,11 @@ const CraftedWeb = () => {
     animate={{ opacity: 1 }}
     transition={{ duration: 0.4 }}
   >
-    <div className="container mx-auto px-6 py-12 min-h-[calc(100vh-80px)] w-full">
-      <div className="flex flex-col md:flex-row gap-8 w-full max-w-screen-xl mx-auto">
-        <div className="md:w-1/2 flex items-center">
+    <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 min-h-[calc(100vh-80px)] w-full">
+      <div className="flex flex-col md:flex-row gap-6 md:gap-8 w-full max-w-screen-xl mx-auto">
+        <div className="w-full md:w-1/2 flex items-center">
           <motion.div
-            className="bg-cover bg-center w-full h-116 rounded-lg shadow-xl"
+            className="bg-cover bg-center w-full h-64 md:h-96 lg:h-116 rounded-lg shadow-xl"
             style={{ backgroundImage: `url(${currentService.imageUrl})` }}
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -297,29 +304,27 @@ const CraftedWeb = () => {
           />
         </div>
         
-        <div className="md:w-1/2 flex items-center">
+        <div className="w-full md:w-1/2 flex items-center mt-6 md:mt-0">
           <motion.div
             className="w-full"
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h1 className="text-4xl font-bold mb-6 text-white">{currentService.title}</h1>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-white">{currentService.title}</h1>
             
-            <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6 text-black shadow-xl">
+            <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-4 md:p-6 text-black shadow-xl">
               {currentService.detailedDescription.split('\n').map((paragraph, idx) => 
                 paragraph.trim().startsWith('•') ? (
                   <ul key={idx} className="list-disc pl-6 mb-4">
                     {paragraph.split('•').filter(item => item.trim()).map((item, i) => (
-                      <li key={i} className="mb-2">{item.trim()}</li>
+                      <li key={i} className="mb-2 text-base md:text-lg">{item.trim()}</li>
                     ))}
                   </ul>
                 ) : (
-                  <p key={idx} className="mb-4 text-lg">{paragraph}</p>
+                  <p key={idx} className="mb-4 text-base md:text-lg">{paragraph}</p>
                 )
               )}
-              
-
             </div>
           </motion.div>
         </div>
@@ -334,10 +339,24 @@ const CraftedWeb = () => {
       ) : (
         // Main Homepage
         <>
-          <header className="w-full py-6 shadow-lg bg-white text-blue-600 text-center text-3xl font-bold sticky top-0 z-50">
-            <nav className="flex justify-between items-center px-18">
-              <div className="text-3xl font-bold">Crafted Web</div>
-              <div className="space-x-4">
+          <header className="w-full py-4 md:py-6 shadow-lg bg-white text-blue-600 text-center sticky top-0 z-50">
+            <nav className="flex justify-between items-center px-4 md:px-8 lg:px-18">
+              <div className="text-xl md:text-3xl font-bold">Crafted Web</div>
+              
+              {/* Mobile menu button */}
+              <div className="md:hidden">
+                <button 
+                  onClick={toggleMenu}
+                  className="p-2 text-blue-600 focus:outline-none"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Desktop menu */}
+              <div className="hidden md:flex space-x-2 lg:space-x-4">
                 <Button onClick={() => scrollToSection('home')}>Home</Button>
                 <Button onClick={() => scrollToSection('about')}>About</Button>
                 <Button onClick={() => scrollToSection('services')}>Services</Button>
@@ -345,6 +364,24 @@ const CraftedWeb = () => {
                 <Button onClick={() => scrollToSection('contact')}>Contact</Button>
               </div>
             </nav>
+            
+            {/* Mobile menu dropdown */}
+            {menuOpen && (
+              <motion.div 
+                className="md:hidden bg-white text-blue-600 py-4 shadow-md"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex flex-col space-y-3">
+                  <Button onClick={() => scrollToSection('home')}>Home</Button>
+                  <Button onClick={() => scrollToSection('about')}>About</Button>
+                  <Button onClick={() => scrollToSection('services')}>Services</Button>
+                  <Button onClick={() => scrollToSection('portfolio')}>Portfolio</Button>
+                  <Button onClick={() => scrollToSection('contact')}>Contact</Button>
+                </div>
+              </motion.div>
+            )}
           </header>
 
           <section
@@ -359,15 +396,15 @@ const CraftedWeb = () => {
               //transition={{ duration: 10, repeat: Infinity, repeatType: 'reverse' }}
             />
             <motion.div
-              className="relative z-10"
+              className="relative z-10 px-4"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
             >
-              <h1 className="text-9xl text-white-600 font-extrabold mb-4">Crafted Web</h1>
-              <p className="text-6xl text-white-600 mb-8">We Build Websites That Convert</p>
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-9xl text-white-600 font-extrabold mb-4">Crafted Web</h1>
+              <p className="text-xl sm:text-3xl md:text-4xl lg:text-6xl text-white-600 mb-6 md:mb-8">We Build Websites That Convert</p>
               <Button
-                className="bg-green-500 text-white text-lg px-8 py-4 rounded-full shadow-lg hover:bg-green-600"
+                className="bg-green-500 text-white text-base md:text-lg px-6 py-3 md:px-8 md:py-4 rounded-full shadow-lg hover:bg-green-600"
                 onClick={() => scrollToSection('services')}
               >
                 View Services
@@ -377,20 +414,20 @@ const CraftedWeb = () => {
 
           <section
             id="about"
-            className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 px-12 items-center text-xl min-h-screen"
+            className="mt-12 md:mt-20 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 px-4 md:px-12 items-center text-base md:text-xl py-12 md:py-0 md:min-h-screen"
           >
             <motion.div
-              initial={{ x: -100, opacity: 0 }}
+              initial={{ x: -50, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 1 }}
             >
-              <h2 className="text-green-500 text-3xl font-bold uppercase mb-2">
+              <h2 className="text-green-500 text-xl md:text-3xl font-bold uppercase mb-2">
                 Crafting Digital Success
               </h2>
-              <h2 className="text-7xl font-bold mb-6">
+              <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6">
                 Transforming your online presence
               </h2>
-              <p className="text-3xl text-gray-100">
+              <p className="text-base md:text-xl lg:text-3xl text-gray-100">
                 At Crafted Web, we specialize in elevating businesses by
                 creating stunning, functional websites. Whether you lack an online
                 presence or your current website falls short, our expert team is
@@ -400,26 +437,26 @@ const CraftedWeb = () => {
               </p>
             </motion.div>
             <motion.div
-              className="bg-gray-300 w-full h-[1000px] flex items-center justify-center text-gray-700 text-2xl rounded-lg"
+              className="bg-gray-300 w-full h-64 md:h-96 lg:h-[1000px] flex items-center justify-center text-gray-700 text-xl md:text-2xl rounded-lg mt-6 md:mt-0"
               style={{ backgroundImage: "url('about.png')", backgroundSize: 'cover' }}
               initial={{ scale: 0.8 }}
             >
             </motion.div>
           </section>
 
-          <section id="services" className="mt-50 pb-50 grid grid-cols-1 bg-gradient-to-r to-blue-300 from-pink-200 md:grid-cols-3 gap-8 px-8 py-30">
-            <h2 className="text-7xl font-bold text-center col-span-3 mb-8">Our Service</h2>
+          <section id="services" className="mt-12 md:mt-20 pb-12 md:pb-20 grid grid-cols-1 bg-gradient-to-r to-blue-300 from-pink-200 md:grid-cols-3 gap-6 md:gap-8 px-4 md:px-8 py-12 md:py-16">
+            <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-center col-span-1 md:col-span-3 mb-6 md:mb-8">Our Service</h2>
             {services.map((service, index) => (
-              <motion.div key={index} whileHover={{ scale: 1.05 }}>
+              <motion.div key={index} whileHover={{ scale: 1.05 }} className="mb-4 md:mb-0">
                 <Card onClick={() => openServiceDetail(service.id)}>
                   <CardContent>
                     <motion.div
-                      className="bg-cover bg-center w-full h-80 mb-6 rounded-lg"
+                      className="bg-cover bg-center w-full h-48 md:h-64 lg:h-80 mb-4 md:mb-6 rounded-lg"
                       style={{ backgroundImage: `url(${service.imageUrl})` }}
                       whileHover={{ rotate: 1.7 }}
                     />
-                    <h2 className="text-3xl font-bold mb-4">{service.title}</h2>
-                    <p className="text-lg">{service.description}</p>
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-4">{service.title}</h2>
+                    <p className="text-base md:text-lg">{service.description}</p>
                     <div className="mt-4 text-teal-500 font-semibold flex items-center">
                       <span>Learn more</span>
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
@@ -432,18 +469,18 @@ const CraftedWeb = () => {
             ))}
           </section>
 
-          <section id="portfolio" className="mt- pb-55 w-full bg-gradient-to-r to-indigo-300 from-teal-500 px-8 py-20">
+          <section id="portfolio" className="w-full bg-gradient-to-r to-indigo-300 from-teal-500 px-4 md:px-8 py-12 md:py-20">
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-7xl font-bold text-center mb-12">Our Portfolio</h2>
-              <p className="text-3xl text-center mb-12">
+              <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-center mb-6 md:mb-12">Our Portfolio</h2>
+              <p className="text-base md:text-2xl lg:text-3xl text-center mb-8 md:mb-12">
                 Check out some of the amazing websites we've built!
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
                 {portfolioItems.map((item, index) => (
                   <motion.div 
                     key={index}
@@ -462,11 +499,11 @@ const CraftedWeb = () => {
                       <Card className="overflow-hidden h-full">
                         <CardContent className="p-0">
                           <div 
-                            className="h-64 bg-cover bg-center" 
+                            className="h-48 md:h-64 bg-cover bg-center" 
                             style={{ backgroundImage: `url(${item.imageUrl})` }}
                           />
-                          <div className="p-6">
-                            <h3 className="text-2xl font-bold mb-2">{item.title}</h3>
+                          <div className="p-4 md:p-6">
+                            <h3 className="text-xl md:text-2xl font-bold mb-2">{item.title}</h3>
                             <p className="text-gray-600 mb-4">{item.description}</p>
                             <div className="flex justify-between items-center">
                               <span className="text-teal-500 font-semibold">View Project</span>
@@ -489,15 +526,15 @@ const CraftedWeb = () => {
             </motion.div>
           </section>
 
-          <section id="contact" className="mt-20 pb-55 text-center px-12 py-12">
-            <h2 className="text-5xl font-bold mb-8">Contact Us</h2>
-            <p className="text-2xl mb-6">
+          <section id="contact" className="mt-12 md:mt-20 text-center px-4 md:px-12 py-12">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-8">Contact Us</h2>
+            <p className="text-lg md:text-2xl mb-6">
               Ready to build or transform your website? Get in touch today!
             </p>
             <motion.form
               ref={form}
               onSubmit={handleSubmit}
-              className="max-w-2xl mx-auto space-y-6"
+              className="max-w-md md:max-w-2xl mx-auto space-y-4 md:space-y-6"
               initial={{ scale: 1 }}
               whileHover={{ scale: 1 }}
             >
@@ -507,7 +544,7 @@ const CraftedWeb = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Your Name"
-                className="w-full p-4 rounded-lg text-gray-800 bg-white border border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl"
+                className="w-full p-3 md:p-4 rounded-lg text-gray-800 bg-white border border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-base md:text-xl"
               />
               <input
                 type="email"
@@ -515,19 +552,19 @@ const CraftedWeb = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Your Email"
-                className="w-full p-4 rounded-lg text-gray-800 bg-white border border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl"
+                className="w-full p-3 md:p-4 rounded-lg text-gray-800 bg-white border border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-base md:text-xl"
               />
               <textarea
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="Your Message"
-                className="w-full p-4 rounded-lg text-gray-800 bg-white border border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl"
+                className="w-full p-3 md:p-4 rounded-lg text-gray-800 bg-white border border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-base md:text-xl"
                 rows="6"
               />
 
               {formStatus.message && (
-                <div className={`p-4 rounded-lg text-white ${formStatus.success ? 'bg-green-600' : 'bg-red-600'}`}>
+                <div className={`p-3 md:p-4 rounded-lg text-white ${formStatus.success ? 'bg-green-600' : 'bg-red-600'}`}>
                   {formStatus.message}
                 </div>
               )}
@@ -535,14 +572,14 @@ const CraftedWeb = () => {
               <Button 
                 type="submit" 
                 disabled={formStatus.submitting}
-                className="bg-blue-600 text-white text-xl px-10 py-5 rounded-full shadow-lg hover:bg-indigo-600"
+                className="bg-blue-600 text-white text-base md:text-xl px-6 py-3 md:px-10 md:py-5 rounded-full shadow-lg hover:bg-indigo-600"
               >
                 {formStatus.submitting ? 'Sending...' : 'Send Message'}
               </Button>
             </motion.form>
           </section>
 
-          <footer className="w-full py-4 mt-20 bg-gradient-to-r from-indigo-500 to-teal-300 text-center text-white">
+          <footer className="w-full py-4 mt-12 md:mt-20 bg-gradient-to-r from-indigo-500 to-teal-300 text-center text-white">
             &copy; {new Date().getFullYear()} Crafted Web. All rights reserved.
           </footer>
         </>

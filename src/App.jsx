@@ -389,8 +389,12 @@ const CraftedWeb = () => {
             className="relative h-screen w-full flex items-center justify-center text-center text-white"
           >
             <motion.div
-              className="absolute inset-0 bg-cover bg-center bg-fixed w-full h-full"
-              style={{ backgroundImage: "url('home2.webp')", opacity: 0.6 }}
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full h-full"
+              style={{ 
+                backgroundImage: "url('home2.webp')", 
+                opacity: 0.6,
+                backgroundSize: "cover"
+              }}
               initial={{ scale: 1 }}
               //animate={{ scale: 1.1 }}
               //transition={{ duration: 10, repeat: Infinity, repeatType: 'reverse' }}
